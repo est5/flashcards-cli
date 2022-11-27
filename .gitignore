@@ -9,6 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+todo.txt
 
 # Docker
 docker/data
