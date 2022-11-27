@@ -1,0 +1,19 @@
+version: '3.9'
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./initDb.sql:/docker-entrypoint-initdb.d/initDb.sql
+    environment:
+      - POSTGRES_PASSWORD=flashcards
+    ports:
+      - '5432:5432'
+    restart: always
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
