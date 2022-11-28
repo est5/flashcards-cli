@@ -11,26 +11,14 @@ public class FlashcardController
         _dbContext = dbContext;
     }
 
-    public void GetFlashcardById(int id)
-    {
+    public void GetFlashcardById(int id) => throw new NotImplementedException();
 
-    }
+    public void GetAllFlashcards() => throw new NotImplementedException();
 
-    public void GetAllFlashcards()
-    {
+    public void AddFlashcard(Flashcard flashcard) => throw new NotImplementedException();
 
-    }
+    public void DeleteFlashcardById(int id) => throw new NotImplementedException();
 
-    public void AddFlashcard(Flashcard flashcard)
-    {
-
-    }
-
-    public void DeleteFlashcardById(int id)
-    {
-
-    }
-
-
+    public void UpdateFlashcardByID(int id) => throw new NotImplementedException();
 
 }
