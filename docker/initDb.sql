@@ -5,20 +5,28 @@ CREATE TABLE flashcard (
 );
 
 CREATE TABLE stack (
-    id          SERIAL PRIMARY KEY,
-    title       varchar(40),
-    flashcards  integer[]
+    id              SERIAL PRIMARY KEY,
+    title           varchar(40)
+);
+
+CREATE TABLE flashcards(
+    id              SERIAL PRIMARY KEY,
+    stack_id        int REFERENCES stack ON DELETE CASCADE,
+    flashcard_id    int REFERENCES flashcard ON DELETE CASCADE
 );
 
 CREATE TABLE game_session (
     id          SERIAL PRIMARY KEY,
     stack_id    int REFERENCES stack ON DELETE CASCADE,
-    points      integer,
+    points      int,
     date        timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'GMT+3')
 );
 
 INSERT INTO flashcard (front, back)
 VALUES ('Beer','Пиво'),('Bear','Медведь'),('Language','Язык');
 
-INSERT INTO stack (title, flashcards)
-VALUES ('En-RU','{1,2,3}');
+INSERT INTO stack (title)
+VALUES ('En-RU');
+
+INSERT INTO flashcards(stack_id,flashcard_id)
+VALUES (1,1), (1,2), (1,3);
