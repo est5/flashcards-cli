@@ -60,7 +60,33 @@ public class FlashcardController
         return cards;
     }
 
-    public void AddFlashcard(Flashcard flashcard) => throw new NotImplementedException();
+    public void AddFlashcard(Flashcard flashcard)
+    {
+        using (var _dbContext = new Postgres().GetDB())
+        {
+            _dbContext.Open();
+
+            var command = _dbContext.CreateCommand();
+            command.CommandText = @"
+            INSERT INTO flashcard(front,back)
+            VALUES(
+                @front, @back
+            )
+            ";
+
+            NpgsqlParameter frontParam = new("@front", NpgsqlTypes.NpgsqlDbType.Varchar);
+            frontParam.Value = flashcard.Front;
+            command.Parameters.Add(frontParam);
+
+            NpgsqlParameter backParam = new("@back", NpgsqlTypes.NpgsqlDbType.Text);
+            backParam.Value = flashcard.Back;
+            command.Parameters.Add(backParam);
+
+
+            command.Prepare();
+            command.ExecuteNonQuery();
+        }
+    }
 
     public void DeleteFlashcardById(int id) => throw new NotImplementedException();
 

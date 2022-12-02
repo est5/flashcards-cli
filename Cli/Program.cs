@@ -1,8 +1,10 @@
 ﻿using FlashCardsLib.Controller;
-using FlashCardsLib.DB;
-
+using FlashCardsLib.Model;
 
 var cntrl = new FlashcardController();
+var cardToAdd = new Flashcard("String", "Строка");
+cntrl.AddFlashcard(cardToAdd);
+
 
 var card = cntrl.GetFlashcardById(1);
 System.Console.WriteLine($"front:{card.Front} back:{card.Back}");
