@@ -44,7 +44,7 @@ public class FlashcardController
 
             var command = _dbContext.CreateCommand();
             command.CommandText = @"
-            SELECT front,back FROM flashcard;
+            SELECT front,back,id FROM flashcard;
             ";
 
             command.Prepare();
@@ -53,7 +53,9 @@ public class FlashcardController
             {
                 var front = (string)reader[0];
                 var back = (string)reader[1];
+                var id = Convert.ToInt32(reader[2]);
                 var card = new Flashcard(front, back);
+                card.Id = id;
                 cards.Add(card);
             }
         }
@@ -88,7 +90,26 @@ public class FlashcardController
         }
     }
 
-    public void DeleteFlashcardById(int id) => throw new NotImplementedException();
+    public void DeleteFlashcardById(int id)
+    {
+        using (var _dbContext = new Postgres().GetDB())
+        {
+            _dbContext.Open();
+
+            var command = _dbContext.CreateCommand();
+            command.CommandText = @"
+            DELETE FROM flashcard
+            WHERE id = @id
+            ";
+
+            NpgsqlParameter param = new("@id", NpgsqlTypes.NpgsqlDbType.Integer);
+            param.Value = id;
+            command.Parameters.Add(param);
+
+            command.Prepare();
+            command.ExecuteNonQuery();
+        }
+    }
 
     public void UpdateFlashcardByID(int id) => throw new NotImplementedException();
 
