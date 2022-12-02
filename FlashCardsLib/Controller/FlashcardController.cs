@@ -30,6 +30,7 @@ public class FlashcardController
             {
                 card.Front = (string)reader[0];
                 card.Back = (string)reader[1];
+                card.Id = id;
             }
         }
         return card;
@@ -111,6 +112,33 @@ public class FlashcardController
         }
     }
 
-    public void UpdateFlashcardByID(int id) => throw new NotImplementedException();
+    public void UpdateFlashcardByID(Flashcard newCard, int id)
+    {
+        using (var _dbContext = new Postgres().GetDB())
+        {
+            _dbContext.Open();
 
+            var command = _dbContext.CreateCommand();
+            command.CommandText = @"
+            UPDATE flashcard
+            SET front = @front, back = @back
+            WHERE id = @id
+            ";
+
+            NpgsqlParameter frontParam = new("@front", NpgsqlTypes.NpgsqlDbType.Varchar);
+            frontParam.Value = newCard.Front;
+            command.Parameters.Add(frontParam);
+
+            NpgsqlParameter backParam = new("@back", NpgsqlTypes.NpgsqlDbType.Text);
+            backParam.Value = newCard.Back;
+            command.Parameters.Add(backParam);
+
+            NpgsqlParameter param = new("@id", NpgsqlTypes.NpgsqlDbType.Integer);
+            param.Value = id;
+            command.Parameters.Add(param);
+
+            command.Prepare();
+            command.ExecuteNonQuery();
+        }
+    }
 }
