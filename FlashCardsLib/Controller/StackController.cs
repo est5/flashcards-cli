@@ -6,12 +6,6 @@ namespace FlashCardsLib.Controller;
 public class StackController
 {
 
-    private NpgsqlConnection _dbContext;
-    public StackController(NpgsqlConnection dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public void GetAllStacks() => throw new NotImplementedException();
 
     public void GetStackById(int stackId) => throw new NotImplementedException();

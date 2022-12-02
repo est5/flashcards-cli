@@ -1,3 +1,4 @@
+using FlashCardsLib.DB;
 using FlashCardsLib.Model;
 using Npgsql;
 
@@ -5,16 +6,11 @@ namespace FlashCardsLib.Controller;
 
 public class FlashcardController
 {
-    private NpgsqlConnection _dbContext;
-    public FlashcardController(NpgsqlConnection dbContext)
-    {
-        _dbContext = dbContext;
-    }
 
     public Flashcard GetFlashcardById(int id)
     {
         var card = new Flashcard("", "");
-        using (_dbContext)
+        using (var _dbContext = new Postgres().GetDB())
         {
             _dbContext.Open();
 
@@ -39,7 +35,30 @@ public class FlashcardController
         return card;
     }
 
-    public void GetAllFlashcards() => throw new NotImplementedException();
+    public List<Flashcard> GetAllFlashcards()
+    {
+        List<Flashcard> cards = new();
+        using (var _dbContext = new Postgres().GetDB())
+        {
+            _dbContext.Open();
+
+            var command = _dbContext.CreateCommand();
+            command.CommandText = @"
+            SELECT front,back FROM flashcard;
+            ";
+
+            command.Prepare();
+            var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                var front = (string)reader[0];
+                var back = (string)reader[1];
+                var card = new Flashcard(front, back);
+                cards.Add(card);
+            }
+        }
+        return cards;
+    }
 
     public void AddFlashcard(Flashcard flashcard) => throw new NotImplementedException();
 
