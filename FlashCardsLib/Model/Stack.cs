@@ -9,6 +9,7 @@ public class Stack
     }
 
     public string Title { get; set; }
+    public int Id { get; set; }
     public List<int> Flashcards { get; set; }
 
     public void AddCard(int cardId)

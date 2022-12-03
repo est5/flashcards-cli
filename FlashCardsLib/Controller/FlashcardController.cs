@@ -10,11 +10,11 @@ public class FlashcardController
     public Flashcard GetFlashcardById(int id)
     {
         var card = new Flashcard("", "");
-        using (var _dbContext = new Postgres().GetDB())
+        using (var con = new Postgres().GetDB())
         {
-            _dbContext.Open();
+            con.Open();
 
-            var command = _dbContext.CreateCommand();
+            var command = con.CreateCommand();
             command.CommandText = @"
             SELECT front,back FROM flashcard
             WHERE id = @id
@@ -39,11 +39,11 @@ public class FlashcardController
     public List<Flashcard> GetAllFlashcards()
     {
         List<Flashcard> cards = new();
-        using (var _dbContext = new Postgres().GetDB())
+        using (var con = new Postgres().GetDB())
         {
-            _dbContext.Open();
+            con.Open();
 
-            var command = _dbContext.CreateCommand();
+            var command = con.CreateCommand();
             command.CommandText = @"
             SELECT front,back,id FROM flashcard;
             ";
@@ -65,11 +65,11 @@ public class FlashcardController
 
     public void AddFlashcard(Flashcard flashcard)
     {
-        using (var _dbContext = new Postgres().GetDB())
+        using (var con = new Postgres().GetDB())
         {
-            _dbContext.Open();
+            con.Open();
 
-            var command = _dbContext.CreateCommand();
+            var command = con.CreateCommand();
             command.CommandText = @"
             INSERT INTO flashcard(front,back)
             VALUES(
@@ -93,11 +93,11 @@ public class FlashcardController
 
     public void DeleteFlashcardById(int id)
     {
-        using (var _dbContext = new Postgres().GetDB())
+        using (var con = new Postgres().GetDB())
         {
-            _dbContext.Open();
+            con.Open();
 
-            var command = _dbContext.CreateCommand();
+            var command = con.CreateCommand();
             command.CommandText = @"
             DELETE FROM flashcard
             WHERE id = @id
@@ -114,11 +114,11 @@ public class FlashcardController
 
     public void UpdateFlashcardByID(Flashcard newCard, int id)
     {
-        using (var _dbContext = new Postgres().GetDB())
+        using (var con = new Postgres().GetDB())
         {
-            _dbContext.Open();
+            con.Open();
 
-            var command = _dbContext.CreateCommand();
+            var command = con.CreateCommand();
             command.CommandText = @"
             UPDATE flashcard
             SET front = @front, back = @back
