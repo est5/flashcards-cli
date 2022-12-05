@@ -1,3 +1,5 @@
+using FlashCardsLib.Controller;
+
 namespace FlashCardsLib.Model;
 
 public class Stack
@@ -21,4 +23,10 @@ public class Stack
     {
         Flashcards.Remove(cardId);
     }
+
+    public override string ToString()
+    {
+        return $"Title: {this.Title}, ID: {this.Id}";
+    }
+
 }
