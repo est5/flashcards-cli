@@ -12,7 +12,8 @@ CREATE TABLE stack (
 CREATE TABLE flashcards(
     id              SERIAL PRIMARY KEY,
     stack_id        int REFERENCES stack ON DELETE CASCADE,
-    flashcard_id    int REFERENCES flashcard ON DELETE CASCADE
+    flashcard_id    int REFERENCES flashcard ON DELETE CASCADE,
+    UNIQUE (stack_id, flashcard_id)
 );
 
 CREATE TABLE game_session (

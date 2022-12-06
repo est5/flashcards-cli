@@ -67,10 +67,85 @@ public class StackController
         return stacks;
     }
 
-    public void AddFlashcardToStackById(Flashcard flashcard, int stackId) => throw new NotImplementedException();
+    public void AddFlashcardToStackById(int cardId, int stackId)
+    {
+        try
+        {
+            using (var con = new Postgres().GetDB())
+            {
+                con.Open();
 
-    public void DeleteStackById(int stackId) => throw new NotImplementedException();
+                var command = con.CreateCommand();
+                command.CommandText = @"
+                INSERT INTO flashcards (stack_id, flashcard_id)
+                VALUES(
+                    @stack_id, @flashcard_id
+                )
+                ";
 
-    public void RemoveCardFromStackById(int stackId, int cardId) => throw new NotImplementedException();
+                NpgsqlParameter stackParam = new("@stack_id", NpgsqlTypes.NpgsqlDbType.Integer);
+                stackParam.Value = stackId;
+                command.Parameters.Add(stackParam);
+
+
+                NpgsqlParameter cardParam = new("@flashcard_id", NpgsqlTypes.NpgsqlDbType.Integer);
+                cardParam.Value = cardId;
+                command.Parameters.Add(cardParam);
+
+                command.Prepare();
+                command.ExecuteNonQuery();
+            }
+        }
+        catch (System.Exception)
+        {
+            Console.WriteLine("Card already in stack");
+        }
+    }
+
+    public void DeleteStackById(int stackId)
+    {
+        using (var con = new Postgres().GetDB())
+        {
+            con.Open();
+
+            var command = con.CreateCommand();
+            command.CommandText = @"
+            DELETE FROM stack
+            WHERE id = @stack_id
+            ";
+
+            NpgsqlParameter stackParam = new("@stack_id", NpgsqlTypes.NpgsqlDbType.Integer);
+            stackParam.Value = stackId;
+            command.Parameters.Add(stackParam);
+
+            command.Prepare();
+            command.ExecuteNonQuery();
+        }
+    }
+
+    public void RemoveCardFromStackById(int stackId, int cardId)
+    {
+        using (var con = new Postgres().GetDB())
+        {
+            con.Open();
+
+            var command = con.CreateCommand();
+            command.CommandText = @"
+            DELETE FROM flashcards
+            WHERE stack_id = @stack_id AND flashcard_id = @card_id
+            ";
+
+            NpgsqlParameter stackParam = new("@stack_id", NpgsqlTypes.NpgsqlDbType.Integer);
+            stackParam.Value = stackId;
+            command.Parameters.Add(stackParam);
+
+            NpgsqlParameter cardParam = new("@card_id", NpgsqlTypes.NpgsqlDbType.Integer);
+            cardParam.Value = cardId;
+            command.Parameters.Add(cardParam);
+
+            command.Prepare();
+            command.ExecuteNonQuery();
+        }
+    }
 
 }
