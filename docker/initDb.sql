@@ -16,13 +16,6 @@ CREATE TABLE flashcards(
     UNIQUE (stack_id, flashcard_id)
 );
 
-CREATE TABLE game_session (
-    id          SERIAL PRIMARY KEY,
-    stack_id    int REFERENCES stack ON DELETE CASCADE,
-    points      int,
-    date        timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'GMT+3')
-);
-
 INSERT INTO flashcard (front, back)
 VALUES ('Beer','Пиво'),('Bear','Медведь'),('Language','Язык');
 
