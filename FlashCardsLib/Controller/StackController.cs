@@ -148,4 +148,27 @@ public class StackController
         }
     }
 
+    public void CreateStack(Stack stack)
+    {
+
+        using (var con = new Postgres().GetDB())
+        {
+            con.Open();
+
+            var command = con.CreateCommand();
+            command.CommandText = @"
+            INSERT INTO stack(title)
+            VALUES(
+                @title
+            )
+            ";
+
+            NpgsqlParameter param = new("@card_id", NpgsqlTypes.NpgsqlDbType.Varchar);
+            param.Value = stack.Title;
+            command.Parameters.Add(param);
+
+            command.Prepare();
+            command.ExecuteNonQuery();
+        }
+    }
 }
