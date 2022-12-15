@@ -4,7 +4,7 @@
 C# project (.NET 6)
 
 - Npgsql
-- Posgresql
+- Postgresql
 - Docker
 - CRUD
 - Console app
